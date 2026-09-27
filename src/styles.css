@@ -3,6 +3,25 @@
 @import "./vendor/pittsburgh.css";
 @import "./vendor/audience.css";
 
+.findings-notice { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; margin: 0 0 20px; border-left: 4px solid var(--gold); background: #fff7df; font-size: 14px; }
+.findings-notice[hidden], .findings-count[hidden] { display: none; }
+.findings-notice button { color: var(--teal); font-weight: 600; }
+.findings-count { display: inline-grid; place-items: center; background: #f2d896; color: #292e31; border-radius: 12px; min-width: 22px; padding: 1px 5px; font-size: 12px; margin-left: 4px; }
+.findings-view { display: grid; gap: 20px; }
+.findings-view .alert-card { min-width: 0; }
+.findings-view .scan-stats span { color: var(--muted); }
+.findings-view .scan-stats strong { color: #886518; }
+.findings-view .alert-card h3 { overflow-wrap: anywhere; }
+.findings-view .scan-controls { width: 100%; border-top: 1px solid var(--line); padding-top: 14px; }
+.scan-controls summary, .monitor-history summary { cursor: pointer; font-weight: 600; }
+.scan-controls p { margin: 12px 0; }
+.scan-controls form { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.scan-controls label { display: grid; gap: 6px; font-size: 13px; }
+.scan-controls input { width: min(350px, 65vw); padding: 10px; border: 1px solid var(--line); border-radius: 4px; }
+.monitor-error { color: #843a25; background: #fff0e9; padding: 12px; width: 100%; }
+.findings-view button:disabled { opacity: .55; cursor: wait; }
+@media (max-width: 650px) { .findings-notice { align-items: start; flex-direction: column; } .findings-view .scan-stats { gap: 18px; flex-wrap: wrap; } }
+
 svg#map {
   width: 100%;
   height: 100%;

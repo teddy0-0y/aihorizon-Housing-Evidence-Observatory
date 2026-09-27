@@ -45,12 +45,12 @@ ${JSON.stringify(pack)}
 `;
 }
 
-export async function runHousingChat({ question, ids, snapshot, apiKey, model, fetchImpl = fetch }) {
+export async function runHousingChat({ question, ids, snapshot, finding, apiKey, model, fetchImpl = fetch }) {
   const q = String(question || "").trim();
   if (!q) {
     return { ok: false, code: "bad_request", message: "Ask a question about the selected evidence." };
   }
-  const coverageReply = unsupportedSearchReply(q, snapshot);
+  const coverageReply = finding ? null : unsupportedSearchReply(q, snapshot);
   if (coverageReply) return coverageReply;
   if (!apiKey) {
     return {
@@ -59,7 +59,8 @@ export async function runHousingChat({ question, ids, snapshot, apiKey, model, f
       message: "OPENAI_API_KEY is not set. Maps and evidence still work. Create a key at https://platform.openai.com/api-keys, paste it into .env.local, and restart.",
     };
   }
-  const pack = selectEvidence(snapshot, relevantEvidenceIds(q, ids || {}, snapshot));
+  const pack = selectEvidence(snapshot, finding ? ids : relevantEvidenceIds(q, ids || {}, snapshot));
+  if (finding) pack.finding = { title: finding.title, interpretation: finding.reason, uncertainty: finding.uncertainty, nextCheck: finding.nextCheck, evidence: finding.evidence, note: "Unverified AI lead, not an established fact. Evaluate against the source records." };
   pack.datasetScope = {
     tractCount: snapshot.tracts?.length || 0,
     permitRecordCount: snapshot.permits?.records?.length || 0,
@@ -78,6 +79,7 @@ export async function runHousingChat({ question, ids, snapshot, apiKey, model, f
       body: JSON.stringify({
         model: modelId,
         temperature: 0,
+        max_completion_tokens: 1800,
         messages: [
           {
             role: "system",

@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server/index.mjs",
+    "start": "NODE_ENV=production node server/index.mjs",
     "build": "vite build",
     "fetch-data": "node scripts/fetch-data.mjs",
     "test": "node --test tests/*.test.mjs"
@@ -12,7 +13,8 @@
     "node": ">=22"
   },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "pg": "^8.23.0"
   },
   "devDependencies": {
     "vite": "^7.1.7"

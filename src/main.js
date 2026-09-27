@@ -1,4 +1,5 @@
 import "./styles.css";
+import { findingsHtml, unreadFindings, reviewFinding } from "./findings.mjs";
 import { formatAssistantText } from "./assistant-format.mjs";
 import { groupPermits, searchPermits, completionAssessment } from "./permit-search.mjs";
 import { readWatchlist, trackProperty, untrackProperty } from "./permit-watchlist.mjs";
@@ -7,26 +8,27 @@ const WORKSPACES = {
   resident: {
     name: "Find a Place",
     audience: "For residents",
-    views: { overview: "Budget & Areas", explore: "Explore Areas", compare: "Compare Areas", projects: "Permit Explorer", watchlist: "Watchlist", saved: "Saved Areas", sources: "Sources" },
+    views: { overview: "Budget & Areas", explore: "Explore Areas", compare: "Compare Areas", projects: "Permit Explorer", watchlist: "Watchlist", findings: "AI Findings", saved: "Saved Areas", sources: "Sources" },
   },
   policy: {
     name: "Understand Housing Change",
     audience: "For policymakers",
-    views: { overview: "Overview", explore: "Area Trends", compare: "Trends & Compare", projects: "Permit Explorer", watchlist: "Watchlist", sources: "Sources" },
+    views: { overview: "Overview", explore: "Area Trends", compare: "Trends & Compare", projects: "Permit Explorer", watchlist: "Watchlist", findings: "AI Findings", sources: "Sources" },
   },
   research: {
     name: "Check the Evidence",
     audience: "For researchers & advocates",
-    views: { overview: "Research Desk", explore: "Area Evidence", compare: "Trends & Compare", projects: "Project Evidence", watchlist: "Watchlist", sources: "Sources" },
+    views: { overview: "Research Desk", explore: "Area Evidence", compare: "Trends & Compare", projects: "Project Evidence", watchlist: "Watchlist", findings: "AI Findings", sources: "Sources" },
   },
   provider: {
     name: "Explore Housing Needs",
     audience: "For developers & nonprofits",
-    views: { overview: "Area Profiles", explore: "Explore Needs", compare: "Compare Areas", projects: "Proposed Supply", watchlist: "Watchlist", saved: "Saved Research Areas", sources: "Sources" },
+    views: { overview: "Area Profiles", explore: "Explore Needs", compare: "Compare Areas", projects: "Proposed Supply", watchlist: "Watchlist", findings: "AI Findings", saved: "Saved Research Areas", sources: "Sources" },
   },
 };
 
 const PAGE_TITLES = {
+  findings: ["What needs your attention.", "AI-selected research leads, grounded in the database."],
   home: ["Housing questions. A place to start.", "Explore public evidence for Pittsburgh and Allegheny County."],
   overview: ["Housing, in context.", "Follow change. Investigate the evidence."],
   explore: ["See the place. Follow the evidence.", "Housing conditions and development records, connected."],
@@ -53,6 +55,9 @@ const state = {
   permitQuery: "",
   permitSearched: false,
   data: null,
+  monitor: null,
+  findingsFilter: "open",
+  findingId: null,
   assistantOpen: false,
   ai: { loading: false, result: null, question: "" },
 };
@@ -74,7 +79,34 @@ async function init() {
   } catch {
     /* ignore */
   }
+  await refreshFindings();
   render();
+  setInterval(refreshFindings, 15000);
+}
+
+async function refreshFindings() {
+  try {
+    const res = await fetch("/api/findings");
+    if (!res.ok) throw new Error("Unavailable");
+    const monitor = await res.json();
+    const changed = JSON.stringify(monitor) !== JSON.stringify(state.monitor);
+    state.monitor = monitor;
+    updateFindingsNotice();
+    if (changed && state.view === "findings" && !state.assistantOpen && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) render();
+  } catch {
+    state.monitor = { ...(state.monitor || {}), unavailable: true };
+    updateFindingsNotice();
+  }
+}
+
+function updateFindingsNotice() {
+  const count = unreadFindings(state.monitor).length;
+  document.querySelectorAll("[data-findings-count]").forEach((badge) => { badge.textContent = count; badge.hidden = !count; });
+  const notice = document.getElementById("findings-notice");
+  if (!notice) return;
+  const failed = state.monitor?.unavailable || ["failed", "interrupted"].includes(state.monitor?.lastRun?.status);
+  notice.hidden = !count && !failed;
+  notice.querySelector("span").textContent = failed ? "The housing scan needs attention. Previous findings remain available." : `${count} AI ${count === 1 ? "finding needs" : "findings need"} your review.`;
 }
 
 function tract(id) {
@@ -104,7 +136,7 @@ function options() {
 function render() {
   const w = WORKSPACES[state.workspace];
   const [title, sub] = PAGE_TITLES[state.view];
-  const navIds = ["home", "overview", "explore", "compare", "projects", "watchlist", "saved", "sources"];
+  const navIds = ["home", "overview", "explore", "compare", "projects", "findings", "watchlist", "saved", "sources"];
   el.innerHTML = `
     <a href="#main" class="skip">Skip to content</a>
     <header>
@@ -118,7 +150,7 @@ function render() {
         ${navIds.map((id) => {
           const label = id === "home" ? "Start here" : w.views[id];
           if (!label) return "";
-          return `<button type="button" data-view="${id}" class="${id === state.view ? "active" : ""}" ${id === state.view ? 'aria-current="page"' : ""} ${id === "watchlist" ? `id="watch-nav"` : ""}>${label}${id === "watchlist" && watchlistItems().length ? ` <span id="alert-count" aria-label="${watchlistItems().length} tracked properties">${watchlistItems().length}</span>` : ""}</button>`;
+          return `<button type="button" data-view="${id}" class="${id === state.view ? "active" : ""}" ${id === state.view ? 'aria-current="page"' : ""} ${id === "watchlist" ? `id="watch-nav"` : ""}>${label}${id === "findings" ? ` <span class="findings-count" data-findings-count hidden></span>` : ""}${id === "watchlist" && watchlistItems().length ? ` <span id="alert-count" aria-label="${watchlistItems().length} tracked properties">${watchlistItems().length}</span>` : ""}</button>`;
         }).join("")}
       </nav>
       <div class="sidebar-place"><strong>PITTSBURGH / PA</strong>Independent housing research</div>
@@ -137,6 +169,7 @@ function render() {
         <span>Explorer permit snapshot <strong>${esc(state.data.permits?.lastModified?.slice(0, 10) || "dated")}</strong></span>
         <span class="period-note">Historical estimates · not live listings</span>
       </div>
+      <div id="findings-notice" class="findings-notice" role="status" hidden><span></span><button type="button" data-view="findings">Review AI findings →</button></div>
       ${viewHtml()}
       <footer>
         <span>Housing Evidence / Research preview</span>
@@ -149,8 +182,8 @@ function render() {
         <div><span class="eyebrow">RESEARCH WORKSPACE</span><h2>Ask about the evidence</h2></div>
         <button id="close-assistant" type="button" aria-label="Close research assistant">×</button>
       </div>
-      <div class="assistant-mode"><strong>OpenAI Housing AI</strong><span>Uses OPENAI_API_KEY on this computer. The server picks the evidence pack; the model cannot browse or edit files.</span></div>
-      <div class="context" id="assistant-context">${state.view === "projects" ? `Permit context: ${esc(selectedPermitGroup()?.address || "No result selected")}` : `Context: Tract ${esc(tract(state.tractA)?.tract)} + Tract ${esc(tract(state.tractB)?.tract)}`}</div>
+      <div class="assistant-mode"><strong>OpenAI Housing AI</strong><span>The server selects the source evidence. AI findings are leads to verify; the model cannot browse or edit files.</span></div>
+      <div class="context" id="assistant-context">${state.findingId ? "Context: selected AI finding and its source records" : state.view === "projects" ? `Permit context: ${esc(selectedPermitGroup()?.address || "No result selected")}` : `Context: Tract ${esc(tract(state.tractA)?.tract)} + Tract ${esc(tract(state.tractB)?.tract)}`}</div>
       <div id="chat" class="chat">${chatHtml()}</div>
       <div class="suggestions">
         <button type="button" data-question="Can we count five completed homes at 2700 Penn?">Can we count five completed homes?</button>
@@ -167,6 +200,7 @@ function render() {
     <div id="toast" role="status"></div>
   `;
   bind();
+  updateFindingsNotice();
   if (state.view === "explore") renderMap();
 }
 
@@ -243,6 +277,7 @@ function viewHtml() {
       </section>`;
   }
   if (state.view === "projects") return permitExplorerHtml();
+  if (state.view === "findings") return findingsHtml(state.monitor, esc, state.findingsFilter);
   if (state.view === "watchlist") return watchlistHtml();
   if (state.view === "saved") {
     const saved = JSON.parse(localStorage.getItem("heo-areas") || "null");
@@ -258,7 +293,7 @@ function watchlistItems() {
 function watchlistHtml() {
   const items = watchlistItems();
   const groups = groupPermits(state.data.permits?.records || []);
-  return `<section class="view"><section class="surface"><div class="eyebrow">YOUR WATCHLIST</div><h2>${items.length ? `${items.length} tracked ${items.length === 1 ? "property" : "properties"}` : "No properties tracked yet."}</h2><p>Save an address from Permit Explorer, then return here to review its records. This list is saved in this browser.</p><p class="fine">Records come from the loaded snapshot. Tracking does not automatically refresh data, detect changes, or send notifications.</p><button class="secondary" type="button" data-view="projects">${items.length ? "Find another property" : "Find a property to track"} ↗</button></section>
+  return `<section class="view"><section class="surface"><div class="eyebrow">YOUR WATCHLIST</div><h2>${items.length ? `${items.length} tracked ${items.length === 1 ? "property" : "properties"}` : "No properties tracked yet."}</h2><p>Save an address from Permit Explorer, then return here to review its records. This list is saved in this browser.</p><p class="fine">Records come from the loaded snapshot. Personal bookmarks do not change the shared monitoring scope. Open AI Findings for server-generated research leads and scan status.</p><button class="secondary" type="button" data-view="projects">${items.length ? "Find another property" : "Find a property to track"} ↗</button></section>
   <div class="watchlist-grid">${items.map((item) => {
     const group = groups.find((g) => g.key === item.key);
     return `<article class="surface"><div class="eyebrow">${esc(item.neighborhood || "TRACKED PROPERTY")}</div><h2>${esc(group?.address || item.address)}</h2><p>Parcel ${esc(item.parcel || "unavailable")}</p><p class="fine">Saved ${esc(item.addedAt?.slice(0, 10) || "date unavailable")} · ${group ? `${group.records.length} permit records in the loaded snapshot` : "Not present in the loaded snapshot"}</p><div class="evidence-callout"><strong>${group ? "Completion not verified" : "Records currently unavailable"}</strong>${group ? "The permit records do not establish whether the development is complete or occupancy is approved." : "The saved address is retained, but this snapshot does not contain its permit records. This does not establish that the property no longer exists."}</div><div class="watchlist-actions">${group ? `<button class="primary" type="button" data-open-tracked="${esc(item.key)}">View permit records ↗</button>` : `<a href="https://data.wprdc.org/dataset/pli-permits" target="_blank" rel="noopener noreferrer">Check the source dataset ↗</a>`}<button class="secondary" type="button" data-untrack="${esc(item.key)}" aria-label="Remove ${esc(item.address)} from watchlist">Remove from watchlist</button></div></article>`;
@@ -371,15 +406,15 @@ function overviewHtml() {
         <div class="coverage-gap"><strong>Still missing</strong><span>${esc(roleCopy.g)}</span></div>
       </section>
       <section class="surface scan-panel">
-        <div class="eyebrow">SNAPSHOT STATUS</div>
-        <h2>Source check completed</h2>
+        <div class="eyebrow">PROACTIVE AI REVIEW</div>
+        <h2>What needs a closer look</h2>
         <p>Retrieved ${esc(state.data.generatedAt?.slice(0, 10) || "")}</p>
         <div class="scan-stats">
           <div><strong>${state.data.coverage.tractCount}</strong><span>county tracts</span></div>
-          <div><strong>${watchlistItems().length}</strong><span>tracked properties</span></div>
+          <div><strong>${unreadFindings(state.monitor).length}</strong><span>AI findings to review</span></div>
         </div>
-        <button class="text-link" type="button" data-view="watchlist">Open your watchlist →</button>
-        <p class="fine">OpenAI Housing AI is used for questions. It is not a daily monitoring job.</p>
+        <button class="text-link" type="button" data-view="findings">Review AI findings →</button>
+        <p class="fine">AI scans stored evidence for research leads. Open findings to see the latest run, coverage and verification steps.</p>
       </section>
     </div>
     <section class="surface annual-panel">
@@ -462,7 +497,34 @@ function chatHtml() {
 }
 
 function bind() {
+  el.querySelectorAll("[data-finding-filter]").forEach((button) => button.onclick = () => { state.findingsFilter = button.dataset.findingFilter; render(); });
+  el.querySelectorAll("[data-review-finding]").forEach((button) => button.onclick = () => {
+    try { reviewFinding(button.dataset.reviewFinding, button.dataset.status); render(); } catch { toast("Browser storage unavailable; review status was not saved."); }
+  });
+  el.querySelectorAll("[data-ask-finding]").forEach((button) => button.onclick = () => {
+    const finding = state.monitor?.findings.find((f) => f.id === button.dataset.askFinding);
+    if (!finding) return;
+    state.findingId = finding.id;
+    state.ai.result = null;
+    state.ai.question = `Explain this finding: ${finding.title}. What do the source records establish, and what should I verify next?`;
+    state.assistantOpen = true;
+    render();
+  });
+  el.querySelector("#scan-form")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button");
+    const token = el.querySelector("#scan-token")?.value;
+    button.disabled = true;
+    try {
+      const res = await fetch("/api/monitor/run", { method: "POST", headers: token ? { authorization: `Bearer ${token}` } : {} });
+      const result = await res.json();
+      toast(result.message || "Scan request sent.");
+      if (res.ok) { if (el.querySelector("#scan-token")) el.querySelector("#scan-token").value = ""; await refreshFindings(); }
+    } catch { toast("Could not request a scan. Please try again."); }
+    finally { button.disabled = false; }
+  });
   el.querySelector("#workspace-select").onchange = (e) => {
+    state.findingId = null;
     state.workspace = e.target.value;
     try { localStorage.setItem("housing-workspace", state.workspace); } catch {}
     state.view = "overview";
@@ -539,6 +601,7 @@ function bind() {
   });
   el.querySelectorAll("[data-view]").forEach((b) => {
     b.onclick = () => {
+      state.findingId = null;
       state.view = b.dataset.view;
       if (state.view === "home") state.assistantOpen = false;
       if (state.view === "projects" && b.dataset.permitFocus) {
@@ -553,6 +616,7 @@ function bind() {
   });
   el.querySelectorAll("[data-start-workspace]").forEach((b) => {
     b.onclick = () => {
+      state.findingId = null;
       state.workspace = b.dataset.startWorkspace;
       state.view = b.dataset.startView;
       state.assistantOpen = false;
@@ -563,6 +627,7 @@ function bind() {
   });
   el.querySelectorAll("[data-example]").forEach((b) => {
     b.onclick = () => {
+      state.findingId = null;
       state.workspace = "policy";
       state.view = b.dataset.example;
       if (state.view === "projects") {
@@ -585,6 +650,7 @@ function bind() {
   });
   el.querySelector(".brand").onclick = (e) => {
     e.preventDefault();
+    state.findingId = null;
     state.view = "home";
     state.assistantOpen = false;
     render();
@@ -612,7 +678,7 @@ function bind() {
   el.querySelector("#open-assistant").onclick = () => { state.assistantOpen = true; render(); };
   el.querySelector("#close-assistant")?.addEventListener("click", () => { state.assistantOpen = false; render(); });
   el.querySelector("#ask-form")?.addEventListener("submit", (e) => { e.preventDefault(); ask(el.querySelector("#question").value); });
-  el.querySelectorAll("[data-question]").forEach((b) => { b.onclick = () => ask(b.dataset.question); });
+  el.querySelectorAll("[data-question]").forEach((b) => { b.onclick = () => { state.findingId = null; ask(b.dataset.question); }; });
   el.querySelector("#download-comparison")?.addEventListener("click", exportBrief);
   el.querySelector("#inv-note")?.addEventListener("change", (e) => localStorage.setItem(`heo-note:${state.project}`, e.target.value));
   el.querySelector("#mark-reviewed")?.addEventListener("click", () => { localStorage.setItem(`heo-reviewed:${state.project}`, "1"); toast("Marked reviewed (workflow only)."); });
@@ -709,6 +775,7 @@ async function ask(question) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         question: q,
+        findingId: state.findingId,
         ids: {
           tracts: [state.tractA, state.tractB],
           permits: state.view === "projects" ? (selectedPermitGroup()?.records || []).map((p) => p.permit_id).filter(Boolean) : [],

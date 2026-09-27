@@ -12,7 +12,7 @@ A permit is not a completed home. An ACS rent estimate is not a current listing.
 
 ## Local setup (teammates)
 
-Node.js 22+. No database. No cloud deploy step — run it on your laptop.
+Node.js 22+. For a one-time screen-recorded demo, run locally with an OpenAI key. No PostgreSQL, cloud account, or scheduler is required. See [DEPLOY.md](DEPLOY.md) for recording steps and optional hosting.
 
 ```sh
 git clone https://github.com/teddy0-0y/aihorizon-Housing-Evidence-Observatory.git
@@ -26,7 +26,7 @@ Open **http://127.0.0.1:5173**.
 
 **You do not need an OpenAI key** to browse maps, compare tracts, search the permit extract, use the watchlist, or export a brief. Those features read the committed snapshots in `evidence/` and `public/`.
 
-**You only need an OpenAI key to use Ask / Housing AI.** Create your own secret at [platform.openai.com/api-keys](https://platform.openai.com/api-keys), paste it into `.env.local` as `OPENAI_API_KEY=sk-...`, save, then restart `npm run dev`. The server still chooses which snapshot fields the model sees. Default model is `gpt-4o-mini` (`OPENAI_MODEL` in `.env.example`).
+**An OpenAI key is required for Ask / Housing AI and proactive AI Findings scans.** Create your own secret at [platform.openai.com/api-keys](https://platform.openai.com/api-keys), paste it into `.env.local` as `OPENAI_API_KEY=sk-...`, save, then restart `npm run dev`. The server still chooses which snapshot fields the model sees. Default model is `gpt-4o-mini` (`OPENAI_MODEL` in `.env.example`).
 
 The real key is **not in GitHub**. Repo files only have an empty `OPENAI_API_KEY=` in `.env.example`. `.env.local` is gitignored — never commit it, and do not reuse someone else’s key.
 
@@ -45,7 +45,7 @@ Saved areas and notes stay in this browser. “Reviewed” is not proof the clai
 
 ## What this build does not do
 
-Current rental listings, landlord reviews, household origin–destination maps, HUD CHAS, verified citywide completions, causal policy evaluation, cloud daily scheduling, or shared team storage.
+Current rental listings, landlord reviews, household origin–destination maps, HUD CHAS, verified citywide completions, causal policy evaluation, email/push notifications, user accounts, or shared personal bookmarks. Scans are manually triggered; there is no automatic schedule. Optional hosting with shared findings is described in [DEPLOY.md](DEPLOY.md).
 
 ## Data
 
@@ -65,4 +65,10 @@ Search the local permit extract by address, permit ID, parcel number, neighborho
 
 ## Personal permit watchlist
 
-Select a Permit Explorer result and choose **Track this property**. Watchlist shows only addresses saved in this browser, with a link back to their records and an option to remove tracking. The badge counts saved properties, not alerts. Tracking does not run refresh jobs, detect changes, or send notifications. Removing tracking leaves permit data and reviewer notes intact.
+Select a Permit Explorer result and choose **Track this property**. Watchlist shows only addresses saved in this browser, with a link back to their records and an option to remove tracking. The badge counts saved properties, not alerts. Personal tracking does not alter the shared monitoring scope. AI Findings runs separately on server-stored evidence and the seeded parcels. Removing tracking leaves permit data and reviewer notes intact.
+
+## Proactive AI Findings
+
+When you click **Run AI scan**, the server reviews stored housing evidence with OpenAI, publishes unverified research leads with exact source records, and shows an in-app findings badge/banner. You can inspect, review/dismiss, and ask the chatbot about each lead. Scans cache unchanged batches and preserve prior results on failure.
+
+For the competition recording, run `npm run dev`, open **AI Findings**, and click **Run AI scan**. Show the running state, genuine findings, source evidence, and **Ask AI about this**. There is no scheduled scan. Unchanged evidence reuses prior analysis, so later runs may finish quickly. Optional `render.yaml` hosting contains only a web service and PostgreSQL; no cron job. See [DEPLOY.md](DEPLOY.md).
