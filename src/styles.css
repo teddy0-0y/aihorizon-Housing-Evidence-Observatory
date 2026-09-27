@@ -45,7 +45,7 @@ svg#map {
 #app > header .brand { color: var(--ink); align-items: center; max-width: 340px; }
 #app > header .brand small { color: var(--muted); margin-top: 5px; }
 #app > header .workspace-switcher { padding: 0; color: var(--muted); }
-#app > header .workspace-switcher label { margin-bottom: 4px; font-size: 10px; }
+#app > header .workspace-switcher label { margin-bottom: 6px; font-size: 14px; }
 #app > header .workspace-switcher p { display: none; }
 #app > header nav { grid-column: 1 / -1; min-width: 0; gap: 25px; overflow-x: auto; height: auto; min-height: 50px; border-top: 1px solid var(--line); }
 #app > header nav button { white-space: nowrap; flex-shrink: 0; padding: 12px 0; }
@@ -73,7 +73,7 @@ svg#map {
 .start-role-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .start-role { display: flex; flex-direction: column; gap: 12px; }
 .start-role-number { font: 500 14px 'IBM Plex Mono', monospace; color: #8c6c20; }
-.start-role .eyebrow { font-size: 10px; }
+.start-role .eyebrow { font-size: 14px; letter-spacing: .04em; }
 .start-role h3 { font-size: 19px; line-height: 1.35; }
 .start-role p { font-size: 14px; margin-bottom: 10px; }
 .start-role button { margin-top: auto; text-align: left; font-size: 13px; }
@@ -122,3 +122,85 @@ svg#map {
 .watchlist-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 18px; }
 .watchlist-actions .primary { padding: 11px 16px; }
 .watchlist-actions button:disabled { opacity: 0.7; cursor: default; }
+
+/* Shared reading scale. Keep supporting evidence legible in every workspace,
+   including narrow screens, rather than shrinking it to fit a card. */
+:root {
+  --text-body: 1rem;
+  --text-control: .9375rem;
+  --text-caption: .875rem;
+}
+body { font-size: var(--text-body); line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+#app > header .brand small { font-size: var(--text-caption); letter-spacing: .04em; }
+#app > header nav button { font-size: var(--text-control); line-height: 1.5; }
+#app > header .workspace-switcher select,
+select, input, textarea, #ask-form textarea, .budget-panel input,
+.map-toolbar select { font-size: var(--text-body); line-height: 1.5; }
+
+.page-heading p, .start-role p, .start-steps p, .start-scope p,
+.section-head p,
+.start-section-heading > p, .start-trails p, .focus-panel p,
+.finding-preview p, .pipeline-explainer p, .source-grid p,
+.source-grid ul, .source-addition p, .saved-projects p,
+.monitor-summary p, .alert-card > p, .rule-grid p,
+.timeline details p, .area-comparison-help, .assistant-prose,
+.message, .message p, .message h3 { font-size: var(--text-body); line-height: 1.65; }
+
+.eyebrow, .page-heading .eyebrow, .field-label, .period,
+.fine, .scan-panel .fine, .coverage-gap, .subtle, .error,
+.timeline summary small, .history-bars b, .map-compass, #map-tooltip,
+.start-intro .start-caption, .start-example small, .start-steps span,
+.scan-panel p, .scan-stats span, .monitor-summary .wide,
+.map-caption, .map-legend, .legend-values, .map-foot,
+.bar-value, .case-item small, .comparison-card dd small,
+.period-values small, .stage-strip small, .project-choice small,
+.budget-results small, .alert-meta, .pill, .findings-count,
+.missing-year-note p, .boundary-notice, .boundary-notice strong,
+.boundary-notice p, .assistant-mode, .context, .message small,
+.assistant-response-details, .ai-evidence-links a,
+.evidence-details a, .evidence-details pre, footer, footer button {
+  font-size: var(--text-caption);
+  line-height: 1.6;
+}
+.eyebrow, .page-heading .eyebrow, .field-label { letter-spacing: .045em; }
+.evidence-details pre { font-family: 'IBM Plex Mono', monospace; }
+
+.primary, .secondary, .text-link, .compare-link, .assistant-toggle,
+.role-tabs button, .segmented button, .watch-toolbar .segmented button,
+.start-role button, .start-actions a, .alert-actions button,
+.suggestions button, .message a, .map-foot button, .source-addition a,
+.data-details summary, .evidence-details summary, .control-label,
+.map-toolbar label, .budget-panel form label, .scan-controls label,
+.compare-controls label,
+.permit-examples, .findings-notice, .chart-key, .stat-label,
+.comparison-card dt, .stage-strip strong, .alert-explanation,
+.ai-interpretation { font-size: var(--text-control); line-height: 1.55; }
+.trend-chart text { font-size: 14px; }
+th { font-size: var(--text-caption); line-height: 1.5; }
+td { font-size: var(--text-control); line-height: 1.6; }
+th, td { padding: 12px 14px; }
+
+/* Give longer labels room to wrap without forcing the page wider. */
+.surface, .tract-panel, .comparison-card, .project-detail,
+.start-role, .start-example, .source-grid > *, .scan-stats > div { min-width: 0; }
+.tract-panel select, .compare-controls select { max-width: 100%; }
+.alert-actions, .chart-key, .map-toolbar, .map-foot { flex-wrap: wrap; }
+.alert-meta, .context, .evidence-details, .source-grid a,
+.project-heading h2, .monitor-error { overflow-wrap: anywhere; }
+.assistant { width: min(480px, 100vw); }
+.suggestions button { text-align: left; white-space: normal; }
+.bar-row { grid-template-columns: 55px minmax(0, 1fr) 155px; }
+.bar-value { white-space: normal; }
+@media (min-width: 901px) {
+  .workspace { grid-template-columns: minmax(0, 1fr) minmax(340px, .4fr); }
+}
+@media (max-width: 650px) {
+  .page-heading { flex-wrap: wrap; }
+  .page-heading .assistant-toggle { max-width: none; }
+  .bar-row { grid-template-columns: 48px minmax(0, 1fr) 140px; gap: 8px; }
+  .coverage-gap { flex-wrap: wrap; gap: 6px; }
+  .scan-stats { flex-wrap: wrap; }
+  .scan-stats > div { flex-basis: 100px; }
+  .chart-key { gap: 12px; }
+}
