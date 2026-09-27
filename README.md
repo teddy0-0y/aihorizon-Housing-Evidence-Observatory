@@ -10,18 +10,27 @@ This repository is a **ground-up build** started 26 September 2026. Pre-event re
 
 A permit is not a completed home. An ACS rent estimate is not a current listing. Household counts are not migration flows. This app connects a housing question to dated public evidence, uncertainty, an AI explanation that can only cite that evidence, and a next check a person can actually do.
 
-## Run locally
+## Local setup (teammates)
 
-Node.js 22+. No database.
+Node.js 22+. No database. No cloud deploy step — run it on your laptop.
 
 ```sh
-cp .env.example .env.local
-# paste OPENAI_API_KEY from https://platform.openai.com/api-keys
+git clone https://github.com/teddy0-0y/aihorizon-Housing-Evidence-Observatory.git
+cd aihorizon-Housing-Evidence-Observatory
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**. Maps, comparisons, investigations, and brief export work without a key. Ask Housing AI needs `OPENAI_API_KEY`. The server still chooses which snapshot fields the model sees.
+Open **http://127.0.0.1:5173**.
+
+**You do not need an OpenAI key** to browse maps, compare tracts, search the permit extract, use the watchlist, or export a brief. Those features read the committed snapshots in `evidence/` and `public/`.
+
+**You only need an OpenAI key to use Ask / Housing AI.** Create your own secret at [platform.openai.com/api-keys](https://platform.openai.com/api-keys), paste it into `.env.local` as `OPENAI_API_KEY=sk-...`, save, then restart `npm run dev`. The server still chooses which snapshot fields the model sees. Default model is `gpt-4o-mini` (`OPENAI_MODEL` in `.env.example`).
+
+The real key is **not in GitHub**. Repo files only have an empty `OPENAI_API_KEY=` in `.env.example`. `.env.local` is gitignored — never commit it, and do not reuse someone else’s key.
+
+`CENSUS_API_KEY` is optional and only used if you run `npm run fetch-data` to refresh Census downloads. The committed snapshot is enough for the demo. Restart the development server after changing server modules or `.env.local`.
 
 ## Four tasks, one evidence layer
 
