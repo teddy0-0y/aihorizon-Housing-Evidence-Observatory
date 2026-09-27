@@ -162,7 +162,7 @@ function render() {
           <h1 id="page-title">${esc(title)}</h1>
           <p id="page-subtitle">${esc(sub)}</p>
         </div>
-        <button class="assistant-toggle" id="open-assistant" type="button">✧ Research assistant <span>↗</span></button>
+        <button class="assistant-toggle" id="open-assistant" type="button">✧ AI Assistant <span>↗</span></button>
       </div>
       <div class="period" ${state.view === "home" ? "hidden" : ""}>
         <span>Community data <strong>2020–2024 ACS</strong></span>
@@ -177,10 +177,10 @@ function render() {
         <button type="button" data-view="sources">Data & limitations ↗</button>
       </footer>
     </main>
-    <aside id="assistant" class="assistant" aria-label="Research assistant" ${state.assistantOpen ? "" : "hidden"}>
+    <aside id="assistant" class="assistant" aria-label="AI Assistant" ${state.assistantOpen ? "" : "hidden"}>
       <div class="assistant-head">
         <div><span class="eyebrow">RESEARCH WORKSPACE</span><h2>Ask about the evidence</h2></div>
-        <button id="close-assistant" type="button" aria-label="Close research assistant">×</button>
+        <button id="close-assistant" type="button" aria-label="Close AI Assistant">×</button>
       </div>
       <div class="assistant-mode"><strong>OpenAI Housing AI</strong><span>The server selects the source evidence. AI findings are leads to verify; the model cannot browse or edit files.</span></div>
       <div class="context" id="assistant-context">${state.findingId ? "Context: selected AI finding and its source records" : state.view === "projects" ? `Permit context: ${esc(selectedPermitGroup()?.address || "No result selected")}` : `Context: Tract ${esc(tract(state.tractA)?.tract)} + Tract ${esc(tract(state.tractB)?.tract)}`}</div>
@@ -336,10 +336,10 @@ function permitExplorerHtml() {
 
 function startHereHtml() {
   const roles = [
-    ["resident", "Residents", "Understand rental costs", "Compare historical rents by home size and save areas to research further.", "Explore rental context", "explore"],
-    ["policy", "Policymakers", "Investigate housing change", "Follow rent trends and check what development records actually establish.", "Open the planner overview", "overview"],
-    ["research", "Researchers & advocates", "Compare housing conditions", "Compare rents, rent burden, and household makeup across small Census areas. Then check the sources and uncertainty behind the differences.", "Compare two areas", "compare"],
-    ["provider", "Developers & nonprofits", "Explore housing needs", "Read household structure and rent burden as starting points for local research.", "Explore area profiles", "explore"],
+    ["resident", "Residents", "Understand rental costs", "Compare historical rents by home size and save areas to research further.", "explore"],
+    ["policy", "Policymakers", "Investigate housing change", "Follow rent trends and check what development records actually establish.", "overview"],
+    ["research", "Researchers & advocates", "Compare housing conditions", "Compare rents, rent burden, and household makeup across small Census areas. Then check the sources and uncertainty behind the differences.", "compare"],
+    ["provider", "Developers & nonprofits", "Explore housing needs", "Read household structure and rent burden as starting points for local research.", "explore"],
   ];
   return `<div class="start-page">
     <section class="start-hero" aria-labelledby="start-headline">
@@ -353,7 +353,7 @@ function startHereHtml() {
       <aside class="start-example" aria-label="Example investigation">
         <div class="eyebrow">A QUESTION WORTH ASKING</div>
         <h3>Does lower rent mean less housing pressure?</h3>
-        <p>Compare two areas, look beyond the rent figure, and ask the research assistant to explain the evidence.</p>
+        <p>Compare two areas, look beyond the rent figure, and ask the AI Assistant to explain the evidence.</p>
         <ol><li>Explore the estimates</li><li>Ask what they support</li><li>Choose your next check</li></ol>
         <small>No live listings. No automatic neighborhood rankings.</small>
       </aside>
@@ -361,14 +361,14 @@ function startHereHtml() {
 
     <section id="choose-workspace" class="start-workspaces" aria-labelledby="start-roles-title">
       <div class="start-section-heading"><div><div class="eyebrow">FOUR WAYS IN</div><h2 id="start-roles-title">What brings you here?</h2></div><p>The same evidence, organized around your questions.</p></div>
-      <div class="start-role-grid">${roles.map(([ws, audience, title, description, action, view], i) => `<article class="surface start-role"><span class="start-role-number">0${i + 1}</span><div class="eyebrow">${audience}</div><h3>${title}</h3><p>${description}</p><button type="button" class="secondary" data-start-workspace="${ws}" data-start-view="${view}">${action} ↗</button></article>`).join("")}</div>
+      <div class="start-role-grid">${roles.map(([ws, audience, title, description, view], i) => `<article class="surface start-role"><span class="start-role-number">0${i + 1}</span><div class="eyebrow">${audience}</div><h3>${title}</h3><p>${description}</p><button type="button" class="secondary" data-start-workspace="${ws}" data-start-view="${view}">${esc(WORKSPACES[ws].name)} ↗</button></article>`).join("")}</div>
     </section>
 
     <section class="start-guide" aria-labelledby="start-guide-title">
       <div class="start-section-heading"><div><div class="eyebrow">YOUR FIRST VISIT</div><h2 id="start-guide-title">From a question to a next step.</h2></div></div>
       <div class="start-steps">
         <article><span>01 / EXPLORE</span><h3>Choose an area</h3><p>Use the map or area selector. A census tract is a small area used to report population and housing data. Numbers such as 203 and 605 identify areas, not homes.</p></article>
-        <article><span>02 / UNDERSTAND</span><h3>Compare and ask</h3><p>Read rents and household conditions together. Ask the AI research assistant to explain the selected evidence and its limits.</p></article>
+        <article><span>02 / UNDERSTAND</span><h3>Compare and ask</h3><p>Read rents and household conditions together. Ask the AI Assistant to explain the selected evidence and its limits.</p></article>
         <article><span>03 / FOLLOW THROUGH</span><h3>Check the source</h3><p>Inspect the original source. In a permit investigation, save a reviewer note describing what still needs verification.</p></article>
       </div>
     </section>

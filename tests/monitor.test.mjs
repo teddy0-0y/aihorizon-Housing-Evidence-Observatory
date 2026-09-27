@@ -25,6 +25,12 @@ test("scan sends every record, persists genuine model output, and reuses unchang
     const body = JSON.parse(options.body);
     const data = JSON.parse(body.messages[1].content);
     assert.equal(body.response_format.json_schema.strict, true);
+    const findingsSchema = body.response_format.json_schema.schema.properties.findings;
+    assert.equal(findingsSchema.maxItems, 3);
+    assert.deepEqual(findingsSchema.items.properties.recordIds, {
+      type: "array", minItems: 1, maxItems: 4,
+      items: { type: "string", enum: data.records.map((r) => r.id) },
+    });
     assert.equal(data.records.length, 2);
     assert.equal(data.records.find((r) => r.id === "tract:A").rent2br, null);
     return response([draft(["permit:P1"])]);

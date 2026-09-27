@@ -2,9 +2,11 @@
 
 **Target: 4:45; final video under 5 minutes.** English narration, with recording directions below. Start with the problem, explain the approach and key features on one slide, then demonstrate how each tab helps a person answer a housing question.
 
-**展示原則：** 每個 tab 都說明「使用者的問題 → 功能如何幫忙 → 下一個行動」，不要只列頁面元素。共用功能完整展示一次；另外三個 workspace 用不同使用者的問題快速帶過，不再重複每個共用頁面。所有 tab 的對照放在文末。
+**展示原則：** 每個 tab 都說明「使用者的問題 → 功能如何幫忙 → 下一個行動」，不要只列頁面元素。四類使用者各有一段明確示範，說出他們的問題、使用的功能與下一步。共用功能完整展示一次，AI scanning 和 chatbot 放在四組示範後，說明它們如何支援所有人。所有 tab 的對照放在文末。
 
-**主線：** Housing data → evidence worth investigating → a human next step.
+**主線：** 四類使用者、四個問題：居民理解租屋成本 → 政策制定者查住宅開發進度 → 研究者與倡議者驗證比較 → 開發商與非營利組織探索需求。最後用共用 AI scanning 和 chatbot 串起「發現線索 → 理解證據 → 下一步查證」。
+
+**怎麼讀這份稿：** 只念 **Narration** 下的英文段落；**操作提示**、備用說法和文末參考都不念。每段最後一句會帶到下一個畫面，換 tab 時不需要另外說「Next, this is the… tab」。時間包含操作與轉場，是剪輯目標；AI 等待時間另依下方規則處理。
 
 ## Preparation — not spoken
 
@@ -18,152 +20,139 @@
 - Choose a genuine finding for the final chatbot example after inspecting its source evidence. Do not promise a particular finding before the model returns it.
 - Keep keys and administrator tokens out of the recording. Use the real public repository URL in the closing caption.
 
-## 0:00–0:15 | Team and track
+## 0:00–0:15 | Opening — introduce the team
 
-**Screen:** Opening slide. Optionally show the presenters in a small camera overlay.
+**操作提示｜開場投影片：** 保持同一張 slide，接著直接講下一段，不用重新介紹標題。
 
-**Say:**
+**Narration**
 
-“Hi, I’m Susana Peng, with my teammate Yen-Chu Chen, from Carnegie Mellon University. We built Housing Evidence Observatory for Track 2 at AI Horizons 2026.”
+Hi, I’m Susana Peng, with my teammate Yen-Chu Chen, from Carnegie Mellon University. We built Housing Evidence Observatory for Track 2 at AI Horizons 2026.
 
-## 0:15–1:00 | One slide: problem → approach → key features
+## 0:15–0:50 | Problem → approach → three features
 
-**投影片用途：** 先讓評審理解為什麼需要這個產品，再讓後面的操作成為解決方法的證據。畫面文字保持短句，不放整段旁白。
+**操作提示｜同一張 slide：** 隨著旁白依序指向 Problem、Approach 和三個 feature。講到最後一句時切到 app 的 **Start here**。
 
-**Slide title:**
+**Narration**
 
-> Housing data is available. What deserves attention?
+Housing data is available, but making sense of it takes work. Census estimates and permit records have different dates and definitions. Lower rent may still come with greater housing pressure, and an issued permit does not mean a finished home.
 
-**Left — THE PROBLEM**
+Our approach combines area and permit exploration, AI scanning for research leads, and an assistant that explains the evidence. We designed four workspaces because different people need to ask different questions.
 
-- Evidence is scattered across sources.
-- Dates and definitions do not always align.
-- Users must decide what to investigate next.
+## 0:50–1:10 | Start here — introduce all four audiences
 
-**Right — OUR APPROACH**
+**操作提示｜Start here：** 四張 audience cards 都要入鏡。隨旁白依序指向 Residents、Policymakers、Researchers & advocates、Developers & nonprofits；不要先切走。最後才選 **Find a Place**。
 
-> Connect the evidence. Surface research leads. Support the next check.
+**Narration**
 
-**Bottom — THREE CORE FEATURES**
+Residents want to understand rental costs. Policymakers need to investigate housing change. Researchers and advocates need to check the evidence behind claims. And developers and nonprofits need to explore housing needs. Let’s show how each group uses the app, starting with residents.
 
-| Understand conditions | Find what needs attention | Explain and follow up |
-| --- | --- | --- |
-| Maps, comparisons & permit records | Manually triggered AI scan with source evidence | Evidence-based chatbot, saved areas & watchlist |
+## 1:10–1:45 | Residents — understand rental costs and pressure
 
-**Small footer:** Pittsburgh & Allegheny County · Public-data research prototype
+**操作提示｜Find a Place：** 先展示 **Budget & Areas** 的城市趨勢，再開 **Explore Areas**，選 203，帶到 **Rent by home size**。最後開 **Compare Areas**，展示 203 與 605 的 rent、severe rent burden、誤差資訊；在 Explore Areas 點 **Save area**，用 **Saved Areas** 展示配對確實儲存。不要逐項念 tab 名稱。
 
-**Say:**
+**Narration**
 
-“The problem is not just finding housing data. It is knowing what that data supports—and what deserves a closer look.
+For residents, the question is: which areas should I research further? Budget & Areas gives the citywide context, and Explore Areas lets us examine historical rents by home size.
 
-“Census estimates and permit records come from different sources and periods. A lower rent estimate does not necessarily mean less housing pressure, and an issued permit does not mean a completed home.
+Comparing two areas adds another dimension: rent burden. A lower rent figure alone does not establish less pressure. Residents can save the comparison and return to it as they research current options. These estimates provide context; they are not live listings.
 
-“Our approach connects those records, uses AI to surface research leads, and helps users decide what to verify next.
+## 1:45–2:15 | Policymakers — check recorded development progress
 
-“Three features support that workflow: area and permit exploration, AI scanning, and an evidence-based research assistant. Let’s see how they work together.”
+**操作提示｜Understand Housing Change：** 先讓 workspace 名稱與 Overview 的研究問題入鏡，再開 **Permit Explorer**。搜尋 **BDA-2024-00084**，選 **319 27TH ST**，展示工作描述、completion assessment 與 reviewer-note 欄位。點 **Track this property**，切 **Watchlist** 展示地址與 **View permit records**。
 
-**Transition:** Switch directly from the slide to **Start here**. Do not read the feature names again on the website.
+**Narration**
 
-## 1:00–1:10 | Start here — choose the question
+For policymakers, the question shifts from rental conditions to housing delivery: what progress do the records actually establish?
 
-**Screen/action:** Show **Start here** and its four audience cards. Select **Find a Place**.
+In Understand Housing Change, this permit describes five houses, but does not verify five completed homes. A reviewer can inspect the records, document what still needs checking, and track the property in the Watchlist. That keeps follow-up tied to the evidence.
 
-**Say:**
+**備註，不念：** 如果已追蹤，就直接展示 Watchlist，不必重新加入。Permit Explorer 搜尋有限的內建 extract，不是即時全市清單；不要暗示這個 permit 能解釋前面兩區的租金差異。Reviewer notes、Watchlist 和 Saved Areas 存在此瀏覽器，不是跨團隊共用工作紀錄。
 
-“Different users start with different questions. We organize the same evidence into four workspaces. Let’s begin with a resident researching rental conditions.”
+## 2:15–2:40 | Researchers & advocates — test a housing claim
 
-## 1:10–2:20 | Explore and compare — what do the records support?
+**操作提示｜Check the Evidence：** 展示 **Research Desk** 的研究問題，再開 **Trends & Compare**，指向誤差資訊、歷史比較限制和 **Download comparison**。接著切 **Sources** 展示原始資料連結，不需要真的下載或離開 app。
 
-Visit these tabs in order. Scroll to the evidence while speaking; do not narrate every click.
+**Narration**
 
-| Tab and time | User problem / purpose | Screen action | Say |
-| --- | --- | --- | --- |
-| **Budget & Areas** · 1:10–1:23 | Users need context before interpreting a rent figure. | Show the research question, then **Pittsburgh over time** and the visible data gaps. | “A single rent figure gives limited context. This overview shows the longer trend and missing periods, so residents can see what the evidence covers.” |
-| **Explore Areas** · 1:23–1:40 | A citywide figure can hide differences between areas and home sizes. | Select **203**. Show its area card and **Rent by home size**; click **Save area** with 203 and 605 selected as the pair. | “Citywide figures can hide local differences. We can inspect a small Census area, compare rents by home size, and save the selected areas for further research. These are historical estimates.” |
-| **Compare Areas** · 1:40–1:58 | Lower rent alone does not establish lower housing pressure. | Show **203** and **605**, rent and severe-burden estimates, then the historical-comparison note. Point to **Download comparison**. | “Does lower rent mean less pressure? Side-by-side rent and burden estimates help us investigate that question. We show uncertainty and supported historical comparisons, and users can download the values.” |
-| **Permit Explorer** · 1:58–2:20 | A permit can be mistaken for housing already delivered. | Search **BDA-2024-00084**, select **319 27TH ST**, and show the work description and completion assessment. Click **Track this property**. | “Development records need interpretation too. This permit describes five houses, but does not verify five completed homes. We preserve the source description and identify what still needs checking. I’ll track this property for follow-up.” |
+Those records also raise a question for researchers and advocates: how strong is the evidence behind a claim?
 
-**Operator notes:** Budget & Areas does not calculate a personal budget. Permit Explorer searches the included extract, not a live citywide inventory. Use the clearly labeled cards for numbers; do not make unsupported claims from map colors or boundaries.
+Check the Evidence supports side-by-side comparisons, shows uncertainty and historical-comparison limits, and lets users download the values. Sources links back to the original datasets, so a finding can be checked before it informs a report or advocacy work.
 
-## 2:20–2:55 | AI Findings — help users notice what to investigate
+## 2:40–3:05 | Developers & nonprofits — frame a needs investigation
 
-**Screen/action:** Open **AI Findings → Run AI scan**. Show the real running state, then completed results. Open one genuine finding’s source records. Point to **Uncertainty**, **Next check**, and the findings badge/banner. Do not send a chatbot question yet.
+**操作提示｜Explore Housing Needs：** 展示 **Area Profiles** 的研究問題，再開 **Explore Needs**，帶到 household structure 和 severe rent burden。短暫展示 **Compare Areas** 或已儲存的 **Saved Research Areas**，讓觀眾看到可以延續區域研究；提到 proposed supply 時切 **Proposed Supply**。
 
-**Say before the scan:**
+**Narration**
 
-“Exploring records helps when we already know what to ask. But users may not know which records deserve attention.
+Developers and nonprofits have another question: where should we investigate unmet housing needs?
 
-“Here, we manually trigger an AI scan of the stored evidence.”
+Explore Housing Needs brings household structure and rent burden into view. Users can compare areas, save a research pair, and inspect proposed supply through permit records. These features help frame further local research; they do not measure a housing shortage or tell us exactly what to build.
 
-**Say after real findings appear:**
+## 3:05–3:40 | Shared AI scanning — help all four groups notice research leads
 
-“The scan surfaces research leads with source records, uncertainty, and a next check. New findings appear in the review panel and badge, so users can decide what to investigate.”
+**操作提示｜AI Findings：** 點 **Run AI scan**，展示真實 scanning 狀態。完成後選一個實際 finding，展示 source records、uncertainty 與 next check；指向新 findings 的 badge 或提示。此時先不要送 chatbot 問題。
 
-**Optional finding-specific sentence:** Replace part of the preceding line with “This lead flags [the actual issue] for verification.” Only say what the displayed finding and its evidence support.
+**Narration — while starting the scan**
 
-**If there are no findings:** Say “This scan returned no research leads. That does not mean there are no housing problems; the evidence and coverage are limited.” Do not substitute an invented finding.
+Across all four workspaces, users may not know which records deserve attention. Our shared AI scan reviews the stored evidence for research leads. In a future deployment, we plan to run scans on a schedule. For this demo, each click starts a single scan.
 
-**If the scan fails:** Say “The scan did not complete. The app shows the failure and retains any previous results.” Do not describe previous findings as new output from this attempt.
+**Narration — after genuine findings appear**
 
-**Recording note:** This is a manually triggered review, not a running daily service or an email/push notification system. AI leads are unverified. The scope shown on screen matters: dated ACS profiles and a limited permit extract.
+Each lead includes source records, uncertainty, and a next check. Findings appear in the review panel and badge, giving all four groups a starting point for investigation.
 
-## 2:55–3:25 | Follow through — keep and verify the evidence
+**錄影前準備，不念：** 選定一個真實 finding，檢查其來源，最後 chatbot 段會回到同一個 finding。可以用 “Here, it flags [actual issue] for verification.” 取代上段其中一句；不要增加一整段而超時。
 
-| Tab and time | User problem / purpose | Screen action | Say |
-| --- | --- | --- | --- |
-| **Watchlist** · 2:55–3:05 | A record of interest is easy to lose between research steps. | Show the address just tracked and **View permit records**. | “Finding a record is only the start. The Watchlist keeps the property available so we can return to its evidence and continue checking.” |
-| **Saved Areas** · 3:05–3:14 | Users need to revisit an area comparison. | Show the saved pair and **Compare areas**. | “Saved Areas keeps our comparison ready to revisit. Both saved areas and tracked properties stay in this browser.” |
-| **Sources** · 3:14–3:25 | Users need to judge whether a claim is supported. | Show original source links and data-gap notes. | “To judge a claim, users need its origin and limits. Sources makes those links and missing data visible for independent checking.” |
+**備用說法，僅在對應情況使用：**
 
-## 3:25–3:50 | Other workspaces — same evidence, different questions
+- **No findings:** “This scan returned no research leads. The evidence and coverage are limited, so that does not mean there are no housing problems. We can still follow up on the records we explored.”
+- **Scan failed:** “This scan did not complete. The app shows the failure and retains any previous results. We can still follow up on the records we explored.”
+- **Cached analysis:** “The evidence has not changed since the earlier scan, so the app is reusing that analysis.” 不要把快取說成剛完成的新模型分析。
 
-**展示重點：** 切換三個 workspace，各展示一個能代表其目的的頁面。其他 tab 已在前面的共用流程展示，不需要再逐一重播。這一段是用途差異，不是另一輪功能清單。
+**備註，不念：** 這是手動觸發、在 app 內提示 findings 的流程。沒有每日排程或 email／手機推播。若剪掉等待時間，加上 **AI processing wait shortened** 字幕。
 
-| Workspace | Screen action | Say |
-| --- | --- | --- |
-| **Understand Housing Change** | Switch workspace, then show the selected **Permit Explorer** record and reviewer-note field. | “Policymakers can investigate recorded development and document what still needs verification.” |
-| **Check the Evidence** | Switch workspace, open **Trends & Compare**, and point to the historical-comparison limitation. | “Researchers can check uncertainty and whether historical comparisons are supported.” |
-| **Explore Housing Needs** | Switch workspace, open **Explore Needs**, and show household structure and severe rent burden. | “Developers and nonprofits can use household and burden estimates to frame further local research. These are starting points, not a measured housing shortage.” |
+## 3:40–4:20 | Shared chatbot — understand a lead and choose the next check
 
-## 3:50–4:25 | Chatbot — turn a finding into a clearer next step
+**操作提示｜回到 AI Findings：** 找到前面同一個真實 finding，點 **Ask AI about this**。送出下方問題，展示實際回答的 **Answer → Evidence → Limits → Next step**。只示範一次對話。
 
-**Screen/action:** Return to **AI Findings** and the real finding shown earlier. Click **Ask AI about this**, then send the prepared question. Show **Answer → Evidence → Limits → Next step**. One chatbot exchange only.
+**Narration — before sending**
 
-**Say before sending:**
+The AI Assistant is also available in every workspace. Let’s open the lead from our scan and ask what its records establish, what remains uncertain, and what we should verify next. Scanning helps users notice a question; the conversation helps them explore it.
 
-“Scanning helps us notice a possible issue. The chatbot helps us understand it. I can ask what this finding actually establishes and what evidence we still need.”
-
-**Use the question prepared by the app, or paste:**
+**Question to send — 不必逐字念出**
 
 > Explain this finding in simple language. What do its source records establish, what remains uncertain, and what should a person verify next?
 
-**Say after the genuine response, only if supported:**
+**Narration — after the actual response, if supported**
 
-“The assistant explains the source evidence, separates interpretation from established facts, and suggests a next check. The person still makes the judgment.”
+Here, the response connects its explanation to the source evidence, describes the limits, and suggests a next check. That helps the user move forward while keeping the final judgment with the person reviewing the evidence.
 
-**Fallback if the scan returned no findings:** Open **Find a Place → Compare Areas**, confirm **203** and **605**, and use the comparison question below instead. Say “We can still ask the assistant to explain the comparison.” Do not imply a finding was generated.
+**若沒有可用 finding：** 開 **Find a Place → Compare Areas**，確認 **203** 和 **605**，再開 assistant。將送出前整段旁白替換成：
+
+Across these questions, people still need help interpreting what they find. Let’s return to our area comparison and ask the assistant whether lower rent means less housing pressure, and what we should check next.
+
+**Fallback question — 不必逐字念出**
 
 > Compare census tract 203 with census tract 605. Does lower rent mean less housing pressure? Explain the rent and severe rent-burden estimates, mention the period and uncertainty, and suggest one next check. Do not assume statistical significance.
 
-**Rehearsal reference only:** Tract 203: 2BR rent $2,761, published rent MOE ±$233, severe burden about 9.7%. Tract 605: $1,583, MOE ±$294, severe burden about 31.7%. Period: pooled 2020–2024 ACS. Verify against the displayed values. These figures do not establish causality or statistical significance.
+**備註，不念：** 回答出現後才講結果，並確認上述描述符合實際內容。若 chatbot 失敗，不念成功旁白；改說 “The assistant could not complete this response. The source records remain available for us to inspect directly.” 接著進結尾。
 
-## 4:25–4:45 | Close — return to the problem
+**排練參考，不念：** Tract 203：2BR rent $2,761，rent MOE ±$233，severe burden 約 9.7%；Tract 605：$1,583，MOE ±$294，severe burden 約 31.7%。期間為 pooled 2020–2024 ACS；以畫面數字為準。這些數值不建立因果關係或統計顯著性。
 
-**Screen/action:** Close the assistant. Return to **Start here** or the opening slide. Add the actual public repository URL as a caption.
+## 4:20–4:45 | Close — four audiences, one evidence workflow
 
-**Say:**
+**操作提示｜資料來源 slide：** 關閉 assistant，切到 [Data Sources PNG](demo/Housing-Evidence-Data-Sources.png)。保持 slide 到結尾，不必逐項念表格名稱。畫面加上實際公開 repo URL。
 
-“Our goal is to help people move from scattered housing data to a clearer question and a verifiable next step.
+**Narration**
 
-“This prototype combines exploration, AI discovery, and explanation. Next, we would test its usefulness with a local housing organization.
+Four audiences, four starting questions, connected through one evidence workflow. Built on public Census data, Pittsburgh permit records, and tract boundaries, Housing Evidence Observatory helps people understand what the evidence supports and decide what to verify next.
 
-“We used Cursor and Codex during development, and OpenAI powers the AI features. Thank you.”
+We used Cursor and Codex during development, and OpenAI powers the AI features. Thank you.
 
-**Operator note:** Confirm the team’s actual tool disclosure. The proposed pilot is a next step, not an existing partnership.
+**備註，不念：** 確認工具揭露符合團隊實際使用情況。資料來源在 slide 上供評審查看；OpenAI 是分析工具，不是住宅資料來源。
 
 ## Tab coverage — reference, not spoken
 
-Every distinct tab/function is covered in the main walkthrough. Other workspaces reuse these views with audience-specific names.
+Every distinct tab/function is covered in the main walkthrough. Each audience gets a dedicated demonstration; shared views have audience-specific names.
 
 | Shared function | Residents | Policymakers | Researchers | Developers / nonprofits |
 | --- | --- | --- | --- | --- |
@@ -180,7 +169,7 @@ Every distinct tab/function is covered in the main walkthrough. Other workspaces
 ## Timing and accuracy — not spoken
 
 - Rehearse with a timer. The time boxes are an editing target, not a guaranteed duration. Reserve the final 15 seconds before the five-minute cap for transitions.
-- If over time, shorten the three secondary-workspace visits and repeated scrolling first. Protect the problem statement, genuine scan, one evidence inspection, and chatbot exchange.
+- If over time, shorten repeated scrolling and tab transitions first. Keep all four audience demonstrations: each must retain its user question, a relevant feature, and the next step it supports. Also protect the genuine scan and one chatbot exchange.
 - Display each shared feature once in detail. Do not repeat the same comparison or Watchlist explanation for all four audiences.
 - Keep processing cuts labeled. If a response fails, show the failure or use a clearly identified successful take; never narrate an anticipated response as though it appeared.
 - Scans are manual. Status polling does not start another analysis. No daily schedule, email, SMS, or OS push is implemented.
