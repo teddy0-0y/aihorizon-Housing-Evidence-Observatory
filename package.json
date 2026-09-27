@@ -1,0 +1,21 @@
+{
+  "name": "housing-evidence-observatory",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server/index.mjs",
+    "build": "vite build",
+    "fetch-data": "node scripts/fetch-data.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.7",
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "vite": "^7.1.7"
+  }
+}

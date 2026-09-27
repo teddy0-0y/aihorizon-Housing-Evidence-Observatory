@@ -1,0 +1,66 @@
+{
+  "allowlist": [
+    "acs5-2024",
+    "acs5-2019",
+    "acs1-gap",
+    "b25031",
+    "b25070",
+    "b25003",
+    "b25009",
+    "b07003",
+    "wprdc-pli",
+    "census-2025-delay"
+  ],
+  "citations": [
+    {
+      "id": "acs5-2024",
+      "label": "ACS 2024 5-year API",
+      "url": "https://api.census.gov/data/2024/acs/acs5.html"
+    },
+    {
+      "id": "acs5-2019",
+      "label": "ACS 2019 5-year API",
+      "url": "https://api.census.gov/data/2019/acs/acs5.html"
+    },
+    {
+      "id": "acs1-gap",
+      "label": "Comparing ACS data",
+      "url": "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data.html"
+    },
+    {
+      "id": "b25031",
+      "label": "B25031 rent by bedrooms",
+      "url": "https://api.census.gov/data/2024/acs/acs5/groups/B25031.html"
+    },
+    {
+      "id": "b25070",
+      "label": "B25070 rent burden",
+      "url": "https://api.census.gov/data/2024/acs/acs5/groups/B25070.html"
+    },
+    {
+      "id": "b25003",
+      "label": "B25003 tenure",
+      "url": "https://api.census.gov/data/2024/acs/acs5/groups/B25003.html"
+    },
+    {
+      "id": "b25009",
+      "label": "B25009 household size by tenure",
+      "url": "https://api.census.gov/data/2024/acs/acs5/groups/B25009.html"
+    },
+    {
+      "id": "b07003",
+      "label": "B07003 geographic mobility",
+      "url": "https://data.census.gov/table/ACSDT5Y2024.B07003"
+    },
+    {
+      "id": "wprdc-pli",
+      "label": "WPRDC PLI permits",
+      "url": "https://data.wprdc.org/dataset/pli-permits"
+    },
+    {
+      "id": "census-2025-delay",
+      "label": "Census ACS 2026 updates",
+      "url": "https://www.census.gov/programs-surveys/acs/news/updates/2026.html"
+    }
+  ]
+}
