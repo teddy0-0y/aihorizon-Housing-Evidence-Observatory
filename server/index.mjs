@@ -36,7 +36,8 @@ server.on("request", async (req, res) => {
         question: body.question,
         ids: body.ids || {},
         snapshot,
-        apiKey: process.env.CURSOR_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY,
+        model: process.env.OPENAI_MODEL,
       });
       return json(res, result.ok ? 200 : result.code === "unconfigured" ? 503 : 400, result);
     }
@@ -57,7 +58,7 @@ server.on("request", async (req, res) => {
 const port = Number(process.env.PORT || 5173);
 server.listen(port, "127.0.0.1", () => {
   console.log(`Housing Evidence Observatory  http://127.0.0.1:${port}`);
-  console.log(isConfigured() ? "Housing AI: Cursor SDK configured" : "Housing AI: not configured (data still works)");
+  console.log(isConfigured() ? "Housing AI: OpenAI configured" : "Housing AI: not configured (data still works)");
 });
 
 function json(res, status, payload) {

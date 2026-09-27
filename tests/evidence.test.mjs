@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseAssistantText, selectEvidence, validateCitations } from "../server/evidence.mjs";
+import { parseAssistantText, recapFromPack, selectEvidence, validateCitations } from "../server/evidence.mjs";
 
 const snapshot = {
   generatedAt: "2026-09-26T00:00:00.000Z",
@@ -43,10 +43,28 @@ test("withheld history does not include previous estimates", () => {
   assert.equal(pack.tracts[0].history.previous, null);
 });
 
+test("selecting a permit does not automatically attach the prepared investigation", () => {
+  const pack = selectEvidence(snapshot, { permits: ["BDA-2024-00084"] });
+  assert.equal(pack.permits.length, 1);
+  assert.equal(pack.investigation, null);
+});
+
+test("unknown investigation IDs do not resolve to the sample case", () => {
+  const pack = selectEvidence(snapshot, { investigationId: "not-this-case" });
+  assert.equal(pack.investigation, null);
+});
+
 test("citation allowlist drops unknown IDs", () => {
   const { valid, dropped } = validateCitations(["b25070", "secret-file", "wprdc-pli"]);
   assert.deepEqual(valid, ["b25070", "wprdc-pli"]);
   assert.deepEqual(dropped, ["secret-file"]);
+});
+
+test("pack recap will not count issued permits as completed homes", () => {
+  const pack = selectEvidence(snapshot, { tracts: ["42003020300"], permits: ["BDA-2024-00084"], includeInvestigation: true });
+  const recap = recapFromPack("Can we count five completed homes at 2700 Penn?", pack);
+  assert.match(recap.answer, /not contain a completion/i);
+  assert.equal(recap.citations.includes("wprdc-pli"), true);
 });
 
 test("parser keeps section heads and strips bad citations", () => {

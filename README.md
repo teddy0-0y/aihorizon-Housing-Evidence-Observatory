@@ -4,7 +4,7 @@ AI Horizons 2026, Track 2: Housing Production, Rents & Household Flow Observator
 
 This repository is a **ground-up build** started 26 September 2026. Pre-event research informed the problem and public sources. Implementation, snapshots, and documentation in this folder were written during the official window and are not a copy of the earlier research prototype.
 
-**Build tools:** Cursor. **Runtime Housing AI:** Cursor SDK (`Agent.prompt`) with a server-selected evidence pack. **Not used at runtime:** Azure OpenAI.
+**Build tools:** Cursor. **Runtime Housing AI:** OpenAI Chat Completions (`gpt-4o-mini` by default) with a server-selected evidence pack. **Not used at runtime:** Azure OpenAI, Cursor SDK.
 
 ## Problem
 
@@ -16,12 +16,12 @@ Node.js 22+. No database.
 
 ```sh
 cp .env.example .env.local
-# optional: paste CURSOR_API_KEY from https://cursor.com/dashboard/integrations
+# paste OPENAI_API_KEY from https://platform.openai.com/api-keys
 npm install
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**. Maps, comparisons, investigations, and brief export work without a key. Ask Housing AI needs `CURSOR_API_KEY`; the first reply can take tens of seconds because it starts a local Cursor agent.
+Open **http://127.0.0.1:5173**. Maps, comparisons, investigations, and brief export work without a key. Ask Housing AI needs `OPENAI_API_KEY`. The server still chooses which snapshot fields the model sees.
 
 ## Four tasks, one evidence layer
 
@@ -44,6 +44,16 @@ See [DATA.md](DATA.md). Figures are dated public snapshots. Missing values are n
 
 ## Tests
 
+Housing AI checks the local snapshot before answering location/availability searches. It preserves explicit permit, address, neighborhood, and tract matches as partial evidence, but does not treat a text match as verified proximity or a listing. The assistant provides curated external housing/permit links when the snapshot cannot establish availability or distance. These links are research suggestions, not live search results. General questions no longer receive the prepared parcel case automatically. Matching currently uses English phrases and exact normalized record names/IDs; it is not semantic or geographic search. Restart the development server after changing server modules.
+
 ```sh
 npm test
 ```
+
+## Permit Explorer search
+
+Search the local permit extract by address, permit ID, parcel number, neighborhood, or work-description keywords. Select a result to inspect its records and prepare an AI question. Results group by parcel where available; this is not verified project identity. Completion is labeled unverified because the extract has no verified completion or occupancy evidence. Empty results provide the broader WPRDC source link, not a substituted sample. Notes are stored separately for each selected group in this browser. The current snapshot contains 25 permits across 2 parcel groups, not a citywide search.
+
+## Personal permit watchlist
+
+Select a Permit Explorer result and choose **Track this property**. Watchlist shows only addresses saved in this browser, with a link back to their records and an option to remove tracking. The badge counts saved properties, not alerts. Tracking does not run refresh jobs, detect changes, or send notifications. Removing tracking leaves permit data and reviewer notes intact.

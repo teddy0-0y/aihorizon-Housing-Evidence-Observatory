@@ -12,7 +12,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@cursor/sdk": "^1.0.7",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
