@@ -76,7 +76,6 @@ The committed snapshots were retrieved September 26–27, 2026. [DATA.md](DATA.m
 
 **At runtime:** OpenAI Chat Completions powers AI Assistant and the manual AI Findings scan. The server supplies public snapshot records. The model has no browsing or file-editing tools. Scan outputs must cite valid IDs from the current batch and pass server validation before publication. This validates structure and references, not the truth of every interpretation.
 
-The repository describes a new build started during the September 26–27, 2026 event window, with prior research informing the problem and sources. The original commit history is preserved for review. Contributors are responsible for the submission's originality and participation attestations.
 
 ## Limitations and responsible use
 
