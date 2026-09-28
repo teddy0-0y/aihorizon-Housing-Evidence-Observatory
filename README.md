@@ -1,4 +1,5 @@
 # Housing Evidence Observatory
+Team: Cina & Chiffon
 
 A public-data research prototype for Pittsburgh and Allegheny County, built for **AI for Housing Hackathon, part of AI Horizons 2026**.
 
