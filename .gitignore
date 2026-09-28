@@ -1,6 +1,8 @@
 node_modules/
 dist/
-.env.local
+.env
+.env.*
+!.env.example
 .DS_Store
 *.log
 .vite/
@@ -8,3 +10,6 @@ coverage/
 scripts/.cache/
 .data/
 ~$*
+
+# Private recording materials retained only on this computer
+.local-submission-backup/

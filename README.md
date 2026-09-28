@@ -1,74 +1,101 @@
 # Housing Evidence Observatory
 
-AI Horizons 2026, Track 2: Housing Production, Rents & Household Flow Observatory — Pittsburgh and Allegheny County.
+A public-data research prototype for Pittsburgh and Allegheny County, built for **AI for Housing Hackathon, part of AI Horizons 2026**.
 
-This repository is a **ground-up build** started 26 September 2026. Pre-event research informed the problem and public sources. Implementation, snapshots, and documentation in this folder were written during the official window and are not a copy of the earlier research prototype.
+**Track 2:** Housing Production, Rents & Household Flow Observatory
 
-**Build tools:** Cursor. **Runtime Housing AI:** OpenAI Chat Completions (`gpt-4o-mini` by default) with a server-selected evidence pack. **Not used at runtime:** Azure OpenAI, Cursor SDK.
+**Contributors:** Susana (Yu Hua) Peng and Yen-Chu Chen, Carnegie Mellon University
 
-## Problem
+## The problem
 
-A permit is not a completed home. An ACS rent estimate is not a current listing. Household counts are not migration flows. This app connects a housing question to dated public evidence, uncertainty, an AI explanation that can only cite that evidence, and a next check a person can actually do.
+Housing evidence comes from sources with different dates, geographies, and definitions. A lower rent estimate does not establish less housing pressure, and an issued permit does not establish a completed home. This app helps users inspect the records behind a question and decide what to verify next.
 
-## Local setup (teammates)
+## Four workspaces
 
-Node.js 22+. For a one-time screen-recorded demo, run locally with an OpenAI key. No PostgreSQL, cloud account, or scheduler is required. See [DEPLOY.md](DEPLOY.md) for recording steps and optional hosting.
+| Workspace | Audience | Supported workflow |
+| --- | --- | --- |
+| Find a Place | Residents | Explore historical rent by home size, compare rent burden, and save an area pair for further research. |
+| Understand Housing Change | Policymakers | Inspect permit records, document unresolved questions, and track properties for follow-up. |
+| Check the Evidence | Researchers and advocates | Compare estimates, inspect periods and uncertainty, download comparisons, and check original sources. |
+| Explore Housing Needs | Developers and nonprofits | Compare household structure and rent burden, save research areas, and inspect proposed supply records. |
+
+**AI Findings** reviews stored evidence when a user clicks **Run AI scan**. It publishes research leads with source records, uncertainty, and a suggested next check. An in-app badge and banner identify unreviewed findings. **AI Assistant** explains selected areas, permit records, or a finding's evidence in an Answer / Evidence / Limits / Next step format.
+
+Users make the final judgment. This is decision support, not binding legal, financial, or zoning advice.
+
+## Run locally
+
+Requires **Node.js 22 or later** and npm.
 
 ```sh
 git clone https://github.com/teddy0-0y/aihorizon-Housing-Evidence-Observatory.git
 cd aihorizon-Housing-Evidence-Observatory
-npm install
-cp .env.example .env.local
+npm ci
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**.
+Open **http://127.0.0.1:5173**. Maps, comparisons, permit search, saved areas, and the Watchlist work with the included snapshots and do not require an API key.
 
-**You do not need an OpenAI key** to browse maps, compare tracts, search the permit extract, use the watchlist, or export a brief. Those features read the committed snapshots in `evidence/` and `public/`.
+To enable AI features, copy `.env.example` to `.env.local` if it does not already exist, set your own `OPENAI_API_KEY`, and restart the server. The default model is `gpt-4o-mini`. Keys stay on the server. Never put them in browser code, screenshots, or committed files. `.env.local` and generated scan state are ignored by Git.
 
-**An OpenAI key is required for Ask / Housing AI and proactive AI Findings scans.** Create your own secret at [platform.openai.com/api-keys](https://platform.openai.com/api-keys), paste it into `.env.local` as `OPENAI_API_KEY=sk-...`, save, then restart `npm run dev`. The server still chooses which snapshot fields the model sees. Default model is `gpt-4o-mini` (`OPENAI_MODEL` in `.env.example`).
+No database service is required locally. See [DEPLOY.md](DEPLOY.md) for environment settings, persistence, and optional hosting.
 
-The real key is **not in GitHub**. Repo files only have an empty `OPENAI_API_KEY=` in `.env.example`. `.env.local` is gitignored — never commit it, and do not reuse someone else’s key.
+## Suggested walkthrough
 
-`CENSUS_API_KEY` is optional and only used if you run `npm run fetch-data` to refresh Census downloads. The committed snapshot is enough for the demo. Restart the development server after changing server modules or `.env.local`.
+1. Open **Find a Place**, explore tract **203**, and compare it with **605**. Read rent and severe rent burden together, including the published uncertainty.
+2. In **Permit Explorer**, search **BDA-2024-00084**, select the result at **319 27TH ST**, and inspect its description and unverified completion assessment.
+3. Track the property and return to its records through **Watchlist**. Area pairs, notes, bookmarks, and review preferences are stored in the current browser.
+4. With your API key configured, open **AI Findings** and click **Run AI scan**. Inspect a returned lead's sources, then select **Ask AI about this** and submit the question.
 
-## Four tasks, one evidence layer
+AI calls incur charges on the API account you configure. Scans have a five-minute cooldown and reuse unchanged evidence. A run can return no findings or fail; the interface reports that state and retains previous successful findings. Results from the developers' local AI runs are not bundled as precomputed demo output.
 
-| Workspace | User | Task in this build |
+## Data and source attribution
+
+| Source | Included use | Coverage |
 | --- | --- | --- |
-| Find a Place | Residents | Compare two-bedroom ACS rent estimates, save areas, export context that is **not** a live listing. |
-| Housing Change | Policymakers | Open a permit investigation (before/after source fields), note, mark reviewed (workflow only), export. |
-| Check Evidence | Researchers | See periods, table IDs, MOEs, the 2020 ACS 1-year gap, and the delayed 2025 ACS 1-year release. |
-| Housing Needs | Developers / nonprofits | Compare household structure and rent burden, then inspect related permits **without** a shortage score. |
+| U.S. Census Bureau [ACS tables](https://data.census.gov/) | B25031 rent by bedrooms, B25070 rent burden, B25003 tenure, B25009 household size by tenure | 394 Allegheny County tract profiles; pooled 2020–2024 and 2015–2019 estimates |
+| U.S. Census Bureau ACS B25064 | Pittsburgh annual median gross rent | 2015–2019 and 2021–2024; missing years remain explicit |
+| U.S. Census Bureau ACS B07003 | Pittsburgh geographic mobility | 2020–2024 estimates for people age 1+, not household origin–destination flows |
+| [Pittsburgh PLI permits via WPRDC](https://data.wprdc.org/dataset/pli-permits) | Permit dates, status, addresses, and work descriptions | Included extract: 25 permit records across two parcel groups |
+| [WPRDC](https://data.wprdc.org/) Allegheny County census tracts | Map polygons | 2020 tract boundaries |
 
-Saved areas and notes stay in this browser. “Reviewed” is not proof the claim is true.
+The committed snapshots were retrieved September 26–27, 2026. [DATA.md](DATA.md) documents provenance, formulas, periods, missing values, and comparison restrictions. The app's **Sources** tab and [citation index](evidence/citations.json) provide source and methodology links. Public records retain their original providers' applicable terms and attribution requirements.
 
-## What this build does not do
+## Architecture and third-party tools
 
-Current rental listings, landlord reviews, household origin–destination maps, HUD CHAS, verified citywide completions, causal policy evaluation, email/push notifications, user accounts, or shared personal bookmarks. Scans are manually triggered; there is no automatic schedule. Optional hosting with shared findings is described in [DEPLOY.md](DEPLOY.md).
+- **Frontend:** JavaScript, HTML, CSS, and Vite. The map uses SVG polygons from the included tract geometry.
+- **Backend:** Node.js HTTP server. It selects bounded evidence for OpenAI requests; the browser never receives the API key.
+- **Storage:** local JSON state for development; PostgreSQL through `pg` for optional hosted operation. Browser local storage holds personal bookmarks and notes.
+- **Libraries and tooling:** Vite, `pg`, and Leaflet are declared in [package.json](package.json), with pinned dependency resolution in [package-lock.json](package-lock.json). Leaflet is included as a dependency; the current map renderer uses SVG.
+- **Fonts:** IBM Plex Sans, IBM Plex Mono, and Barlow Condensed through Google Fonts. Legacy styles also reference DM Sans and Manrope.
+- **External services:** OpenAI Chat Completions, Census public table access, and WPRDC data services. Optional Render configuration is included in [render.yaml](render.yaml); this file does not indicate an active deployment.
 
-## Data
+## AI use disclosure
 
-See [DATA.md](DATA.md). Figures are dated public snapshots. Missing values are null, never filled with zero.
+**During development:** Cursor and OpenAI Codex assisted with implementation, debugging, tests, documentation, and demo preparation. OpenAI image generation produced presentation visuals for the demo video; those recording assets are not included in this repository.
 
-## Tests
+**At runtime:** OpenAI Chat Completions powers AI Assistant and the manual AI Findings scan. The server supplies public snapshot records. The model has no browsing or file-editing tools. Scan outputs must cite valid IDs from the current batch and pass server validation before publication. This validates structure and references, not the truth of every interpretation.
 
-Housing AI checks the local snapshot before answering location/availability searches. It preserves explicit permit, address, neighborhood, and tract matches as partial evidence, but does not treat a text match as verified proximity or a listing. The assistant provides curated external housing/permit links when the snapshot cannot establish availability or distance. These links are research suggestions, not live search results. General questions no longer receive the prepared parcel case automatically. Matching currently uses English phrases and exact normalized record names/IDs; it is not semantic or geographic search. Restart the development server after changing server modules.
+The repository describes a new build started during the September 26–27, 2026 event window, with prior research informing the problem and sources. The original commit history is preserved for review. Contributors are responsible for the submission's originality and participation attestations.
+
+## Limitations and responsible use
+
+- Historical ACS estimates are not current asking rents or property availability. Missing and suppressed values remain unknown, not zero.
+- Census tracts are statistical areas. Their profiles do not establish conditions for an individual household, causality, neighborhood rankings, or statistical significance.
+- Historical comparisons use the implemented GEOID and boundary screening, not an official tract crosswalk. Unsupported comparisons are withheld.
+- Permit search covers the included extract, not a complete citywide inventory. Multiple permits may concern one development. Permit status does not verify construction, completed units, or occupancy.
+- AI scans review batches of records, not every possible relationship across the database. Leads can be inaccurate, incomplete, or repetitive. Inspect sources and seek appropriate professional or community review before consequential decisions.
+- No live listings, verified citywide completions, household origin–destination flows, housing-shortage score, or causal policy evaluation is provided.
+- Scans are manually triggered. Scheduled scanning is a future deployment proposal, not an implemented service. Notifications are in-app only; there is no email or OS push.
+- The prototype has no user accounts or shared personal bookmarks. Public hosting does not provide per-user authorization for chat or scan results. Do not submit private household information to AI Assistant.
+
+A possible next step is practitioner testing of the existing workflows, followed by broader validated source coverage and scheduled reviews. No pilot partnership or deployment is claimed.
+
+## Verification
 
 ```sh
 npm test
+npm run build
 ```
 
-## Permit Explorer search
-
-Search the local permit extract by address, permit ID, parcel number, neighborhood, or work-description keywords. Select a result to inspect its records and prepare an AI question. Results group by parcel where available; this is not verified project identity. Completion is labeled unverified because the extract has no verified completion or occupancy evidence. Empty results provide the broader WPRDC source link, not a substituted sample. Notes are stored separately for each selected group in this browser. The current snapshot contains 25 permits across 2 parcel groups, not a citywide search.
-
-## Personal permit watchlist
-
-Select a Permit Explorer result and choose **Track this property**. Watchlist shows only addresses saved in this browser, with a link back to their records and an option to remove tracking. The badge counts saved properties, not alerts. Personal tracking does not alter the shared monitoring scope. AI Findings runs separately on server-stored evidence and the seeded parcels. Removing tracking leaves permit data and reviewer notes intact.
-
-## Proactive AI Findings
-
-When you click **Run AI scan**, the server reviews stored housing evidence with OpenAI, publishes unverified research leads with exact source records, and shows an in-app findings badge/banner. You can inspect, review/dismiss, and ask the chatbot about each lead. Scans cache unchanged batches and preserve prior results on failure.
-
-For the competition recording, run `npm run dev`, open **AI Findings**, and click **Run AI scan**. Show the running state, genuine findings, source evidence, and **Ask AI about this**. There is no scheduled scan. Unchanged evidence reuses prior analysis, so later runs may finish quickly. Optional `render.yaml` hosting contains only a web service and PostgreSQL; no cron job. See [DEPLOY.md](DEPLOY.md).
+Tests cover data formulas and missing values, evidence selection, permit search and tracking, safe response rendering, and scan validation, caching, budgets, and failure preservation. Automated tests use mocked model responses. Live AI verification requires your own key and does not establish that every future response will be correct.

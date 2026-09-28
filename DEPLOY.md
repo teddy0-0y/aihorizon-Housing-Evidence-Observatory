@@ -1,19 +1,12 @@
-# One-time recording: manual AI scanning + research assistant
+# Running and hosting
 
-For this competition demo, scans start only when you click **Run AI scan**. There is no daily job, startup scan, or automatic scan timer. Website polling reads scan status and results; it does not trigger analysis.
+Scans start only when a user clicks **Run AI scan**. Status polling reads results and does not trigger analysis. Scheduled scanning is not implemented.
 
-## Record locally — no cloud setup required
+## Local development
 
-1. Install dependencies with `npm ci`.
-2. Copy `.env.example` to `.env.local` only if that file does not already exist. Fill in `OPENAI_API_KEY` and keep the file private. Leave `DATABASE_URL` and `MONITOR_ADMIN_TOKEN` empty for local recording.
-3. Run `npm run dev` and open http://127.0.0.1:5173. Restart the server after changing `.env.local`.
-4. Open **AI Findings** and click **Run AI scan**. Capture the running state, then wait for a completed scan. The first run can take several minutes.
-5. Show a genuine finding, its original evidence, uncertainty, and next check. Select **Ask AI about this** and submit the prepared question to demonstrate the chatbot.
-6. You may shorten waiting time in the recording with a clear caption. Do not fabricate findings or imply a model call occurred when a run reused cached analysis. If the model returns no findings, report that result honestly.
+Use Node.js 22 or later, run `npm ci`, then `npm run dev`. Open http://127.0.0.1:5173. To enable AI features, copy `.env.example` to `.env.local` if it does not exist and configure `OPENAI_API_KEY`. Restart after environment or server-code changes.
 
-Results persist in ignored `.data/monitor.json`. An unchanged dataset reuses cached analysis; later scans may finish quickly. Requests are separated by at least five minutes. Keep `.env.local` and `.data/` out of the public repository. No Render account or PostgreSQL is needed for this workflow.
-
-Suggested narration: “For this demo, we trigger the scan manually. The AI reviews our stored housing evidence and identifies research leads with sources and next steps.”
+Without `DATABASE_URL`, development stores scan results in ignored `.data/monitor.json`. Leave `MONITOR_ADMIN_TOKEN` empty for a local-only preview. Source data and non-AI views work without OpenAI credentials.
 
 ## Optional hosted website
 
@@ -26,7 +19,7 @@ Only use this if you also want a shareable live URL. The `render.yaml` blueprint
 
 Use a direct PostgreSQL connection because concurrency control uses session advisory locks. Other Node hosts can build with `npm ci --include=dev && npm run build` and run `npm start`, with the same web-service environment variables.
 
-## What the demo actually monitors
+## Scan coverage and validation
 
 - First startup seeds the database from `evidence/snapshot.json`: 394 dated ACS tract profiles and the included permit extract.
 - With `MONITOR_REFRESH_PERMITS=true`, a manually triggered scan refreshes WPRDC records for the **two seeded parcel groups**, including newly observed permits on those parcels. This is not all-city permit monitoring and does not follow arbitrary addresses added to personal Watchlists.
@@ -45,7 +38,7 @@ The scan button requires an admin token in production. There is no scheduled sca
 
 ## Local preview and verification
 
-`npm run dev` uses `.env.local` and persists preview scan results in ignored `.data/monitor.json` when `DATABASE_URL` is absent. Start a preview scan through the UI; no local scheduler is installed. `npm start` requires PostgreSQL for persistent hosted storage; local recording does not.
+`npm run dev` uses `.env.local` and persists preview scan results in ignored `.data/monitor.json` when `DATABASE_URL` is absent. Start a preview scan through the UI; no scheduler is installed. `npm start` requires PostgreSQL for persistent hosted storage; local development does not.
 
 Run `npm test` and `npm run build`. Tests cover unknown evidence IDs, malformed/truncated AI responses, caching, partial-run failure and resume, source validation, failure preservation, cooldown/budget checks, persistence, and finding-to-chat context. Live OpenAI verification requires a real API key. Optional hosted deployment requires its own acceptance check before sharing a URL.
 
